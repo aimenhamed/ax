@@ -4,28 +4,24 @@
     "url": "http://localhost:8080/hi",
     "method": "GET",
     "headers": [],
-    "print": [
-      "status_code",
-      "status_text",
-      "headers",
-      "body"
-    ]
+    "print": ["status_code", "status_text", "body"]
   },
   {
     "name": "Echo",
     "url": "http://localhost:8080/echo",
     "method": "POST",
-    "headers": [
-      "Content-type: application/json"
-    ],
+    "headers": ["Content-type: application/json"],
     "data": {
       "name": "Aimen"
     },
-    "print": [
-      "status_code",
-      "status_text",
-      "headers",
-      "body"
-    ]
+    "print": ["status_code", "status_text", "body"]
+  },
+  {
+    "name": "Text Echo",
+    "url": "http://localhost:8080/text",
+    "method": "PUT",
+    "headers": ["Content-type: text/plain"],
+    "data": "Hello!",
+    "print": ["status_code", "status_text", "body"]
   }
 ]
