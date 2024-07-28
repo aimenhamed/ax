@@ -33,6 +33,7 @@ The JSON structure:
   "url": "<url>",
   "method": "<http method>",
   "headers": ["<your headers>"],
+  "data": "<payload body sent>",
   "print": ["status_code", "status_text", "headers", "body"] 
 }
 ```
@@ -48,6 +49,7 @@ The JSON structure:
       "url": "<url>",
       "method": "<http method>",
       "headers": ["<your headers>"],
+      "data": "<payload body sent>",
       "print": ["status_code", "status_text", "headers", "body"] 
     }
 ]
