@@ -32,10 +32,11 @@ The JSON structure:
   "name": "<collection name>",
   "url": "<url>",
   "method": "<http method>",
-  "headers": [<your headers>],
-  "print": ["status_code", "status_text", "headers", "body"] // options for how to print the response
+  "headers": ["<your headers>"],
+  "print": ["status_code", "status_text", "headers", "body"] 
 }
 ```
+The valid values for print: `["status_code", "status_text", "headers", "body"]`.
 
 You can store a list of requests in a single collection file, which structure follows similarly to a single collection, but as a list. Invoked via `ax -l <file>`.
 The JSON structure:
@@ -46,8 +47,8 @@ The JSON structure:
       "name": "<collection name>",
       "url": "<url>",
       "method": "<http method>",
-      "headers": [<your headers>],
-      "print": ["status_code", "status_text", "headers", "body"] // options for how to print the response
+      "headers": ["<your headers>"],
+      "print": ["status_code", "status_text", "headers", "body"] 
     }
 ]
 ```
