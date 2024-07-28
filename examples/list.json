@@ -1,0 +1,31 @@
+[
+  {
+    "name": "Hello",
+    "url": "http://localhost:8080/hi",
+    "method": "GET",
+    "headers": [],
+    "print": [
+      "status_code",
+      "status_text",
+      "headers",
+      "body"
+    ]
+  },
+  {
+    "name": "Echo",
+    "url": "http://localhost:8080/echo",
+    "method": "POST",
+    "headers": [
+      "Content-type: application/json"
+    ],
+    "data": {
+      "name": "Aimen"
+    },
+    "print": [
+      "status_code",
+      "status_text",
+      "headers",
+      "body"
+    ]
+  }
+]

@@ -2,6 +2,16 @@
   "name": "Local test",
   "url": "http://localhost:8080/echo",
   "method": "POST",
-  "headers": ["Content-type: application/json"],
-  "print": ["status_code", "status_text", "headers", "body"]
+  "headers": [
+    "Content-type: application/json"
+  ],
+  "data": {
+    "name": "Aimen"
+  },
+  "print": [
+    "status_code",
+    "status_text",
+    "headers",
+    "body"
+  ]
 }

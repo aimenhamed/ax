@@ -18,7 +18,8 @@ ax is a CLI HTTP client aiming for compatibility with `curl` with helpful additi
 - `ax -i "http://example.com"` - A HTTP request with included protocol response headers in the output
 - `ax -X POST "http://example.com -H "Content-type: application/json" -d '{"name":"Jim"}'` - POST request with JSON payload
 - `ax -X POST "http://example.com -j -d '{"name":"Jim"}'` - POST request with JSON payload using header shorthand
-- `ax -c examples/local.json` - You can define your requests as collections in JSON files to be invoked
+- `ax -c examples/local.json` - You can define your request as a collection in a JSON file to be invoked
+- `ax -l examples/list.json` - You can define your requests as list of collections in a JSON file to be invoked
 
 ## Collections
 
@@ -34,4 +35,19 @@ The JSON structure:
   "headers": [<your headers>],
   "print": ["status_code", "status_text", "headers", "body"] // options for how to print the response
 }
+```
+
+You can store a list of requests in a single collection file, which structure follows similarly to a single collection, but as a list. Invoked via `ax -l <file>`.
+The JSON structure:
+
+```json
+[
+    {
+      "name": "<collection name>",
+      "url": "<url>",
+      "method": "<http method>",
+      "headers": [<your headers>],
+      "print": ["status_code", "status_text", "headers", "body"] // options for how to print the response
+    }
+]
 ```

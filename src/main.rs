@@ -1,6 +1,6 @@
 use clap::{Arg, ArgAction, Command};
 mod collection;
-use collection::run_collection;
+use collection::{run_collection, run_collections};
 mod request;
 use request::{create_request, invoke_request, print_response, set_headers};
 
@@ -13,6 +13,7 @@ fn cli() -> Command {
             Arg::new("url")
                 .help("The URL to send the request to")
                 .required_unless_present("collection")
+                .required_unless_present("collection-list")
                 .index(1),
         )
         .arg(
@@ -58,7 +59,17 @@ fn cli() -> Command {
                 .long("collection")
                 .help("Collection to run HTTP request on")
                 .action(ArgAction::Set)
-                .required_unless_present("url"),
+                .required_unless_present("url")
+                .required_unless_present("collection-list"),
+        )
+        .arg(
+            Arg::new("collection-list")
+                .short('l')
+                .long("collections")
+                .help("Collection list to run HTTP requests on")
+                .action(ArgAction::Set)
+                .required_unless_present("url")
+                .required_unless_present("collection"),
         )
 }
 
@@ -68,6 +79,11 @@ fn main() -> Result<(), ureq::Error> {
     let collection = matches.get_one::<String>("collection");
     if let Some(collection_file_path) = collection {
         return run_collection(collection_file_path);
+    }
+
+    let collections = matches.get_one::<String>("collection-list");
+    if let Some(collection_file_path) = collections {
+        return run_collections(collection_file_path);
     }
 
     let method = matches.get_one::<String>("method").unwrap().to_uppercase();

@@ -1,4 +1,5 @@
 use crate::request::{create_request, invoke_request, set_headers};
+use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::fs::File;
@@ -15,50 +16,66 @@ pub struct Collection {
 }
 
 pub fn run_collection(collection_file_path: &String) -> Result<(), ureq::Error> {
-    if let Ok(collection) = read_json_file(collection_file_path) {
-        let mut request = match create_request(collection.method, &collection.url) {
-            Ok(r) => r,
-            Err(e) => {
-                eprintln!("{e}");
-                return Ok(());
-            }
-        };
-
-        let headers: Vec<&String> = collection.headers.iter().collect();
-        let is_json_request = headers
-            .iter()
-            .any(|h| h.to_lowercase().trim() == "content-type:application/json");
-        request = match set_headers(headers, request, is_json_request) {
-            Ok(r) => r,
-            Err(e) => {
-                eprintln!("{e}");
-                return Ok(());
-            }
-        };
-
-        let data = match collection.data {
-            Some(d) => Some(d.to_string()),
-            None => None,
-        };
-
-        let response = invoke_request(request, data.as_ref())?;
-        let name = collection.name;
-
-        println!("\x1b[1mCollection:\x1b[0m {name}\n");
-        return pick_response_prints(response, collection.print);
+    if let Ok(collection) = read_json_file::<Collection>(collection_file_path) {
+        return invoke_collection(collection);
     }
     eprintln!("Cannot find collection file: {}", collection_file_path);
     Ok(())
 }
 
-fn read_json_file(file_path: &str) -> serde_json::Result<Collection> {
+pub fn run_collections(collection_file_path: &String) -> Result<(), ureq::Error> {
+    if let Ok(collections) = read_json_file::<Vec<Collection>>(collection_file_path) {
+        for collection in collections {
+            invoke_collection(collection)?;
+            println!("\n")
+        }
+        return Ok(());
+    }
+    eprintln!("Cannot find collection file: {}", collection_file_path);
+    Ok(())
+}
+
+fn invoke_collection(collection: Collection) -> Result<(), ureq::Error> {
+    let mut request = match create_request(collection.method, &collection.url) {
+        Ok(r) => r,
+        Err(e) => {
+            eprintln!("{e}");
+            return Ok(());
+        }
+    };
+
+    let headers: Vec<&String> = collection.headers.iter().collect();
+    let is_json_request = headers
+        .iter()
+        .any(|h| h.to_lowercase().trim() == "content-type:application/json");
+    request = match set_headers(headers, request, is_json_request) {
+        Ok(r) => r,
+        Err(e) => {
+            eprintln!("{e}");
+            return Ok(());
+        }
+    };
+
+    let data = match collection.data {
+        Some(d) => Some(d.to_string()),
+        None => None,
+    };
+
+    let response = invoke_request(request, data.as_ref())?;
+    let name = collection.name;
+
+    println!("\x1b[1mCollection:\x1b[0m {name}\n");
+    pick_response_prints(response, collection.print)
+}
+
+fn read_json_file<T: DeserializeOwned>(file_path: &str) -> serde_json::Result<T> {
     let mut file = File::open(file_path).expect("Failed to open file");
 
     let mut contents = String::new();
     file.read_to_string(&mut contents)
         .expect("Failed to read file");
 
-    let collection: Collection =
+    let collection: T =
         serde_json::from_str(&contents).expect("Missing fields in given collection file");
 
     Ok(collection)
