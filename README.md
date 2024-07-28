@@ -31,7 +31,8 @@ The JSON structure:
   "name": "<collection name>",
   "url": "<url>",
   "method": "<http method>",
-  "headers": [<your headers>],
-  "print": ["status_code", "status_text", "headers", "body"] // options for how to print the response
+  "headers": ["<your headers>"],
+  "print": ["status_code", "status_text", "headers", "body"] 
 }
 ```
+The valid values for print: `["status_code", "status_text", "headers", "body"]`.
